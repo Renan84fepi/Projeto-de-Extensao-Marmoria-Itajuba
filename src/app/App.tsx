@@ -1,30 +1,87 @@
 import { useState } from 'react';
-import { Menu, Phone, MapPin, Mail, Facebook, Instagram, Youtube, X } from 'lucide-react';
+import {
+  Menu,
+  Phone,
+  MapPin,
+  Mail,
+  Facebook,
+  Instagram,
+  Youtube,
+  X,
+  CheckCircle
+} from 'lucide-react';
+
 import { ImageWithFallback } from './components/figma/ImageWithFallback';
+
 import imagemEmpresa from "@/imports/Imagem_empresa.png";
 import logo from "@/imports/logo.png";
 
 export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  const [showBudgetForm, setShowBudgetForm] = useState(false);
+
+  const [formData, setFormData] = useState({
+    nome: '',
+    telefone: '',
+    email: '',
+    servico: '',
+    mensagem: ''
+  });
+
+  const [successMessage, setSuccessMessage] = useState(false);
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    setSuccessMessage(true);
+
+    setFormData({
+      nome: '',
+      telefone: '',
+      email: '',
+      servico: '',
+      mensagem: ''
+    });
+
+    setTimeout(() => {
+      setSuccessMessage(false);
+      setShowBudgetForm(false);
+    }, 3500);
+  };
+
   return (
     <div className="size-full bg-[#f2f2f2] overflow-auto">
+
       {/* Header */}
       <header className="sticky top-0 z-50 bg-[#f2f2f2] shadow-md">
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
           <div className="flex justify-between items-center h-20">
-            
+
             {/* Logo */}
             <div className="flex items-center gap-3">
+
               <div className="w-21 h-21 flex items-center justify-center">
+
                 <img
                   src={logo}
                   alt="Marmoraria Itajubá Logo"
                   className="w-full h-full object-contain"
                 />
+
               </div>
 
               <div>
+
                 <h1 className="text-xl font-bold text-[#1a1a1a]">
                   MARMORARIA ITAJUBÁ
                 </h1>
@@ -32,11 +89,14 @@ export default function App() {
                 <p className="text-xs text-[#6b6b6b]">
                   123 anos de História
                 </p>
+
               </div>
+
             </div>
 
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center gap-8">
+
               <a href="#inicio" className="text-[#3a3a3a] hover:text-black transition-colors">
                 Início
               </a>
@@ -60,6 +120,7 @@ export default function App() {
               <a href="#contato" className="text-[#3a3a3a] hover:text-black transition-colors">
                 Contato
               </a>
+
             </nav>
 
             {/* Mobile Menu Button */}
@@ -69,11 +130,14 @@ export default function App() {
             >
               {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
+
           </div>
 
           {/* Mobile Navigation */}
           {mobileMenuOpen && (
+
             <nav className="md:hidden py-4 border-t border-[#d1d1d1]">
+
               <div className="flex flex-col gap-4">
 
                 <a href="#inicio" className="text-[#3a3a3a] hover:text-black transition-colors py-2">
@@ -101,13 +165,17 @@ export default function App() {
                 </a>
 
               </div>
+
             </nav>
+
           )}
+
         </div>
+
       </header>
 
       {/* Hero Section */}
-      <section id="inicio" className="relative h-[600px] bg-[#2b2b2b]">
+      <section id="inicio" className="relative min-h-[700px] bg-[#2b2b2b] py-20">
 
         <div className="absolute inset-0 bg-black/50 z-10"></div>
 
@@ -117,7 +185,7 @@ export default function App() {
           className="absolute inset-0 w-full h-full object-cover"
         />
 
-        <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
+        <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-[500px] flex items-center">
 
           <div className="max-w-2xl text-white">
 
@@ -130,12 +198,191 @@ export default function App() {
               Qualidade, elegância e durabilidade em cada projeto.
             </p>
 
-            <button className="bg-[#bdbdbd] hover:bg-[#9f9f9f] text-black px-8 py-4 rounded-lg transition-colors">
+            <button
+              onClick={() => setShowBudgetForm(!showBudgetForm)}
+              className="bg-[#bdbdbd] hover:bg-[#9f9f9f] text-black px-8 py-4 rounded-lg transition-all duration-300 font-semibold shadow-lg hover:scale-105"
+            >
               Solicite um orçamento
             </button>
 
+            {/* FORMULÁRIO */}
+            {showBudgetForm && (
+
+              <div className="mt-8 bg-[#f2f2f2] p-8 rounded-2xl shadow-2xl border border-[#d9d9d9] animate-fade-in max-w-2xl">
+
+                <div className="flex justify-between items-center mb-6">
+
+                  <h3 className="text-3xl font-bold text-[#1a1a1a]">
+                    Solicite seu orçamento
+                  </h3>
+
+                  <button
+                    onClick={() => setShowBudgetForm(false)}
+                    className="text-[#555] hover:text-black transition-colors"
+                  >
+                    <X size={28} />
+                  </button>
+
+                </div>
+
+                {successMessage && (
+
+                  <div className="mb-6 flex items-center gap-3 bg-green-100 border border-green-300 text-green-800 px-5 py-4 rounded-xl shadow-md animate-pulse">
+
+                    <CheckCircle className="w-6 h-6" />
+
+                    <div>
+
+                      <p className="font-bold">
+                        Orçamento enviado com sucesso!
+                      </p>
+
+                      <p className="text-sm">
+                        Em breve entraremos em contato.
+                      </p>
+
+                    </div>
+
+                  </div>
+
+                )}
+
+                <form onSubmit={handleSubmit} className="space-y-5">
+
+                  <div>
+
+                    <label className="block text-[#1a1a1a] font-semibold mb-2">
+                      Nome
+                    </label>
+
+                    <input
+                      type="text"
+                      name="nome"
+                      value={formData.nome}
+                      onChange={handleChange}
+                      required
+                      placeholder="Digite seu nome"
+                      className="w-full bg-white border border-[#cfcfcf] rounded-xl px-4 py-3 text-[#1a1a1a] focus:outline-none focus:ring-2 focus:ring-[#8f8f8f]"
+                    />
+
+                  </div>
+
+                  <div className="grid md:grid-cols-2 gap-4">
+
+                    <div>
+
+                      <label className="block text-[#1a1a1a] font-semibold mb-2">
+                        Telefone
+                      </label>
+
+                      <input
+                        type="text"
+                        name="telefone"
+                        value={formData.telefone}
+                        onChange={handleChange}
+                        required
+                        placeholder="(00) 00000-0000"
+                        className="w-full bg-white border border-[#cfcfcf] rounded-xl px-4 py-3 text-[#1a1a1a] focus:outline-none focus:ring-2 focus:ring-[#8f8f8f]"
+                      />
+
+                    </div>
+
+                    <div>
+
+                      <label className="block text-[#1a1a1a] font-semibold mb-2">
+                        E-mail
+                      </label>
+
+                      <input
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        required
+                        placeholder="seuemail@email.com"
+                        className="w-full bg-white border border-[#cfcfcf] rounded-xl px-4 py-3 text-[#1a1a1a] focus:outline-none focus:ring-2 focus:ring-[#8f8f8f]"
+                      />
+
+                    </div>
+
+                  </div>
+
+                  <div>
+
+                    <label className="block text-[#1a1a1a] font-semibold mb-2">
+                      Serviço desejado
+                    </label>
+
+                    <select
+                      name="servico"
+                      value={formData.servico}
+                      onChange={handleChange}
+                      required
+                      className="w-full bg-white border border-[#cfcfcf] rounded-xl px-4 py-3 text-[#1a1a1a] focus:outline-none focus:ring-2 focus:ring-[#8f8f8f]"
+                    >
+
+                      <option value="">
+                        Selecione um serviço
+                      </option>
+
+                      <option value="cozinha">
+                        Cozinha
+                      </option>
+
+                      <option value="banheiro">
+                        Banheiro
+                      </option>
+
+                      <option value="escada">
+                        Escada
+                      </option>
+
+                      <option value="area-gourmet">
+                        Área Gourmet
+                      </option>
+
+                      <option value="outro">
+                        Outro
+                      </option>
+
+                    </select>
+
+                  </div>
+
+                  <div>
+
+                    <label className="block text-[#1a1a1a] font-semibold mb-2">
+                      Descreva seu projeto
+                    </label>
+
+                    <textarea
+                      name="mensagem"
+                      value={formData.mensagem}
+                      onChange={handleChange}
+                      rows="5"
+                      placeholder="Conte um pouco sobre o seu projeto..."
+                      className="w-full bg-white border border-[#cfcfcf] rounded-xl px-4 py-3 text-[#1a1a1a] resize-none focus:outline-none focus:ring-2 focus:ring-[#8f8f8f]"
+                    ></textarea>
+
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-4 rounded-xl shadow-lg transition-all duration-300 hover:scale-[1.02]"
+                  >
+                    Enviar orçamento
+                  </button>
+
+                </form>
+
+              </div>
+
+            )}
+
           </div>
+
         </div>
+
       </section>
 
       {/* About Section */}
@@ -183,7 +430,9 @@ export default function App() {
             </div>
 
           </div>
+
         </div>
+
       </section>
 
       {/* Kitchen Section */}
@@ -214,9 +463,11 @@ export default function App() {
               />
 
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-6">
+
                 <h3 className="text-white text-xl font-bold">
                   Mármore Branco
                 </h3>
+
               </div>
 
             </div>
@@ -230,9 +481,11 @@ export default function App() {
               />
 
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-6">
+
                 <h3 className="text-white text-xl font-bold">
                   Granito Escuro
                 </h3>
+
               </div>
 
             </div>
@@ -246,15 +499,19 @@ export default function App() {
               />
 
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-6">
+
                 <h3 className="text-white text-xl font-bold">
                   Cozinha Completa
                 </h3>
+
               </div>
 
             </div>
 
           </div>
+
         </div>
+
       </section>
 
       {/* Bathroom Section */}
@@ -285,9 +542,11 @@ export default function App() {
               />
 
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-6">
+
                 <h3 className="text-white text-xl font-bold">
                   Bancada Luxuosa
                 </h3>
+
               </div>
 
             </div>
@@ -301,9 +560,11 @@ export default function App() {
               />
 
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-6">
+
                 <h3 className="text-white text-xl font-bold">
                   Dupla Cuba
                 </h3>
+
               </div>
 
             </div>
@@ -317,15 +578,19 @@ export default function App() {
               />
 
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end p-6">
+
                 <h3 className="text-white text-xl font-bold">
                   Banheiro Moderno
                 </h3>
+
               </div>
 
             </div>
 
           </div>
+
         </div>
+
       </section>
 
       {/* Products Section */}
@@ -350,11 +615,13 @@ export default function App() {
             <div className="bg-[#ffffff] rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition-shadow">
 
               <div className="h-64">
+
                 <ImageWithFallback
                   src="https://images.unsplash.com/photo-1669102046402-7c5e93766565?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtYXJibGUlMjB0ZXh0dXJlJTIwcGF0dGVybnxlbnwxfHx8fDE3Nzc5MzM4NDl8MA&ixlib=rb-4.1.0&q=80&w=1080"
                   alt="Marble texture"
                   className="w-full h-full object-cover"
                 />
+
               </div>
 
               <div className="p-6">
@@ -368,16 +635,19 @@ export default function App() {
                 </p>
 
               </div>
+
             </div>
 
             <div className="bg-[#ffffff] rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition-shadow">
 
               <div className="h-64">
+
                 <ImageWithFallback
                   src="https://images.unsplash.com/photo-1669102048091-46693d0f81cf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwyfHxtYXJibGUlMjB0ZXh0dXJlJTIwcGF0dGVybnxlbnwxfHx8fDE3Nzc5MzM4NDl8MA&ixlib=rb-4.1.0&q=80&w=1080"
                   alt="Marble texture"
                   className="w-full h-full object-cover"
                 />
+
               </div>
 
               <div className="p-6">
@@ -391,16 +661,19 @@ export default function App() {
                 </p>
 
               </div>
+
             </div>
 
             <div className="bg-[#ffffff] rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition-shadow">
 
               <div className="h-64">
+
                 <ImageWithFallback
                   src="https://images.unsplash.com/photo-1566305977571-5666677c6e98?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwzfHxtYXJibGUlMjB0ZXh0dXJlJTIwcGF0dGVybnxlbnwxfHx8fDE3Nzc5MzM4NDl8MA&ixlib=rb-4.1.0&q=80&w=1080"
                   alt="Marble texture"
                   className="w-full h-full object-cover"
                 />
+
               </div>
 
               <div className="p-6">
@@ -414,10 +687,13 @@ export default function App() {
                 </p>
 
               </div>
+
             </div>
 
           </div>
+
         </div>
+
       </section>
 
       {/* Contact Section */}
@@ -440,7 +716,10 @@ export default function App() {
                   <Phone className="w-5 h-5 mt-1 text-[#bdbdbd]" />
 
                   <div>
-                    <p className="font-semibold">Telefone</p>
+
+                    <p className="font-semibold">
+                      Telefone
+                    </p>
 
                     <p className="text-[#cfcfcf]">
                       (35) 3621-1521
@@ -449,6 +728,7 @@ export default function App() {
                     <p className="text-[#cfcfcf]">
                       (35) 98831-9745
                     </p>
+
                   </div>
 
                 </div>
@@ -472,6 +752,7 @@ export default function App() {
                 </div>
 
               </div>
+
             </div>
 
             <div>
@@ -537,6 +818,7 @@ export default function App() {
                 </a>
 
               </div>
+
             </div>
 
           </div>
@@ -548,8 +830,11 @@ export default function App() {
             </p>
 
           </div>
+
         </div>
+
       </section>
+
     </div>
   );
 }
